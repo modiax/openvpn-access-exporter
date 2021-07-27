@@ -10,28 +10,17 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  test:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
-  
   release:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup
-      run: apt install --yes musl-tools musl-dev musl \
+      run: sudo apt-get install --yes musl-tools musl-dev musl \
            && rustup target add x86_64-unknown-linux-musl
-    
+
     - name: Build
       run: cargo build --release
-      
+
     - name: github-action-publish-binaries
       uses: skx/github-action-publish-binaries@release-0.15
       with:
