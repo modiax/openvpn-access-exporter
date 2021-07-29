@@ -1,0 +1,32 @@
+name: Publish
+
+on:
+  release:
+    types: [ created ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup
+      run: sudo apt-get update
+          && sudo apt-get install --yes musl-tools musl-dev musl
+          && rustup target add x86_64-unknown-linux-musl
+
+    - name: Build
+      run: cargo build --release
+
+    - name: Pack bin
+      run: tar -czvf openvpn-access-exporter.tar.gz
+          target/x86_64-unknown-linux-musl/release/openvpn-access-exporter
+
+    - name: github-action-publish-binaries
+      uses: skx/github-action-publish-binaries@release-0.15
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        args: openvpn-access-exporter.tar.gz
