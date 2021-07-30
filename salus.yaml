@@ -1,0 +1,7 @@
+scanner_configs:
+  CargoAudit:
+    elevate_warnings: true
+    exceptions:
+      - advisory_id: RUSTSEC-2020-0016
+        changed_by: sre-team
+        notes: Dependency of dependency
