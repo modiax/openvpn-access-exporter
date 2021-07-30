@@ -3,13 +3,20 @@ name: Rust
 on:
   push:
     branches:
-    - master
-
+      - master
+  pull_request:
+    branches:
+      - master
 jobs:
-  build:
-
+  security_check:
     runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Salus
+      run: docker run --rm -t -v $(pwd):/home/repo coinbase/salus
 
+  build:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - name: Install Musl tools
